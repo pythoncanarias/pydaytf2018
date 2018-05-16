@@ -3,11 +3,16 @@ var gulp        = require("gulp"),
     rename      = require("gulp-rename"),
     cssmin      = require("gulp-cssnano"),
     prefix      = require("gulp-autoprefixer"),
-    sourcemaps  = require("gulp-sourcemaps");
+    sourcemaps  = require("gulp-sourcemaps"),
+    rev         = require("gulp-rev"),
+    clean       = require('gulp-clean'),
+    revRewrite  = require("gulp-rev-rewrite");
+
 var browserSync = require("browser-sync").create();
 
 
 // Static Server + watching scss/html files
+
 gulp.task("serve", function() {
 
     browserSync.init({
@@ -15,11 +20,17 @@ gulp.task("serve", function() {
     });
 
     gulp.watch("source/style/**/*.scss", ["sass"]).on("change", browserSync.reload);
-    gulp.watch("public/*.html").on("change", browserSync.reload);
+    gulp.watch("source/*.html", ["copy-index-dev"]).on("change", browserSync.reload);
 });
-
+gulp.task('clean-css', function () {
+    return gulp.src('public/css', {read: false})
+        .pipe(clean());
+});
+gulp.task('copy-index-dev', function() {
+    return gulp.src('./source/index.html').pipe(gulp.dest('./public'));
+});
 // Compile sass into CSS & auto-inject into browsers
-gulp.task("sass", function() {
+gulp.task("sass", ["clean-css", "copy-index-dev"], function() {
     return gulp.src("source/style/style.scss")
         .pipe(sass().on("error", sass.logError))
         .pipe(gulp.dest("public/css"))
@@ -34,15 +45,27 @@ var sassOptions = {
 var prefixerOptions = {
     browsers: ["last 2 versions"]
 };
-gulp.task("build", function() {
-    return gulp.src("source/style/style.scss")
+gulp.task("minify", ["clean-css"], function() {
+    gulp.src("source/style/style.scss")
         .pipe(sourcemaps.init())
         .pipe(sass(sassOptions))
         .pipe(prefix(prefixerOptions))
-        .pipe(rename("style.css"))
-        .pipe(gulp.dest("public/css"))
         .pipe(cssmin())
+        .pipe(rev())
         .pipe(gulp.dest("public/css"))
+        .pipe(rev.manifest())
+        .pipe(gulp.dest("public/css"));
 });
 
+gulp.task("revRewrite", ["minify"], function() {
+    setTimeout(function() {
+        // Workaround to be sure manifest is created.
+        const manifest = gulp.src("public/css/rev-manifest.json");
+        return gulp.src("source/index.html")
+            .pipe(revRewrite({ manifest: manifest }))
+            .pipe(gulp.dest("public"));
+    }, 500);
+});
+
+gulp.task("build", ["revRewrite"]);
 gulp.task("dev", ["sass", "serve"]);

@@ -21,6 +21,7 @@ $prefix:'-moz-', '-webkit-', '-o-', '-ms-', '';
 @keyframes fadeIn {
   @include keyframe-fadeIn;
 }
+
 @mixin fadeIn( $arg ) {
   $keyframe-name:fadeIn;
   $duration:$arg;
