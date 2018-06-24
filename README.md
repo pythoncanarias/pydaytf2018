@@ -29,8 +29,9 @@ $ npm run dev
 $ npm run build
 ~~~
 
-Se crearán los ficheros minificados y con versiones en la carpeta `/public`.
-Después de hacer build ya se puede desplegar.
+> Se crearán los ficheros minificados y con versiones en la carpeta `/public`.
+
+Después de hacer build ya se pueden comitear los cambios. A continuación lo único que faltaría es desplegar los cambios en producción.
 
 ## Despliegue
 
