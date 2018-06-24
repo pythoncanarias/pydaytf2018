@@ -1,36 +1,41 @@
-# PydayTF 2018 Web
+# #PyDayTF 2018
+
+## Instalación de dependencias
 
 Requerimientos: Node >= 8
-```
-npm install
-```
+
+~~~console
+$ npm install
+~~~
 
 ## Desarrollo
-Para empezar a desarrollar
 
-```
-npm run dev
-```
-Se lanzará un servidor en `localhost:3000` donde verás la web estática de public/index.html
+Para empezar a desarrollar, basta con:
 
-El index que hay que cambiar para desarrollo es el que se encuentra en `source/index.html`
+~~~console
+$ npm run dev
+~~~
 
-**Nunca modifiques nada bajo el directorio `/public`, todos los ficheros de public excepto las imágenes
-se reemplazan a la hora de compilar los estáticos**
+- Se lanzará un servidor en http://localhost:3000 donde verás la web estática de `public/index.html`.
+- El index que hay que cambiar para desarrollo es el que se encuentra en `source/index.html`
 
-Los estilos se programan directamente en source/style utilizando Sass. El servidor compilará los cambios en
-los ficheros sass (y en source/index.html) y se actualizará cada vez que guardes un fichero Sass de manera automática.
+> **Nunca modifiques nada bajo el directorio `/public`, todos los ficheros de public excepto las imágenes se reemplazan a la hora de compilar los estáticos**
+
+- Los estilos se programan directamente en `source/style` utilizando *Sass*. El servidor compilará los cambios en los ficheros `.sass` (y en `source/index.html`) y se actualizará cada vez que guardes un fichero *Sass* de manera automática.
+
 ## Publicación
-```
-npm run build
-```
 
-Se crearán los ficheros minificados y con versiones en la carpeta /public.
-Después de hacer build, haz push de los cambios
-```
-git push
-```
+~~~
+$ npm run build
+~~~
+
+Se crearán los ficheros minificados y con versiones en la carpeta `/public`.
+Después de hacer build ya se puede desplegar.
 
 ## Despliegue
-Simplemente haz git pull en el servidor en el directorio especificado.
 
+~~~console
+$ deploy.sh
+~~~
+
+> En realidad lo único que hace el script es pushear los cambios y pullear desde el directorio del servidor de producción.
