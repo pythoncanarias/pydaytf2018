@@ -23,15 +23,7 @@ $ npm run dev
 
 - Los estilos se programan directamente en `source/style` utilizando *Sass*. El servidor compilará los cambios en los ficheros `.sass` (y en `source/index.html`) y se actualizará cada vez que guardes un fichero *Sass* de manera automática.
 
-## Publicación
-
-~~~
-$ npm run build
-~~~
-
-> Se crearán los ficheros minificados y con versiones en la carpeta `/public`.
-
-Después de hacer build ya se pueden comitear los cambios. A continuación lo único que faltaría es desplegar los cambios en producción.
+- Después de los consiguientes cambios hay que comitear. Lo único que faltaría es desplegar.
 
 ## Despliegue
 
@@ -39,4 +31,4 @@ Después de hacer build ya se pueden comitear los cambios. A continuación lo ú
 $ deploy.sh
 ~~~
 
-> En realidad lo único que hace el script es pushear los cambios y pullear desde el directorio del servidor de producción.
+> El script se encarga de pushear los cambios, pullear desde el directorio del servidor de producción, y construir la web en la carpeta `public`.

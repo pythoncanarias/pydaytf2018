@@ -20,6 +20,7 @@ gulp.task("serve", function() {
     });
 
     gulp.watch("source/style/**/*.scss", ["sass"]).on("change", browserSync.reload);
+    gulp.watch("source/images/**/*", ["copy-images"]).on("change", browserSync.reload);
     gulp.watch("source/*.html", ["copy-index-dev"]).on("change", browserSync.reload);
 });
 gulp.task('clean-css', function () {
@@ -29,8 +30,11 @@ gulp.task('clean-css', function () {
 gulp.task('copy-index-dev', function() {
     return gulp.src('./source/index.html').pipe(gulp.dest('./public'));
 });
+gulp.task("copy-images", function() {
+    return gulp.src("./source/images/**/*").pipe(gulp.dest("./public/images"));
+})
 // Compile sass into CSS & auto-inject into browsers
-gulp.task("sass", ["clean-css", "copy-index-dev"], function() {
+gulp.task("sass", ["clean-css"], function() {
     return gulp.src("source/style/style.scss")
         .pipe(sass().on("error", sass.logError))
         .pipe(gulp.dest("public/css"))
@@ -57,7 +61,7 @@ gulp.task("minify", ["clean-css"], function() {
         .pipe(gulp.dest("public/css"));
 });
 
-gulp.task("revRewrite", ["minify"], function() {
+gulp.task("revRewrite", ["minify", "copy-images"], function() {
     setTimeout(function() {
         // Workaround to be sure manifest is created.
         const manifest = gulp.src("public/css/rev-manifest.json");
@@ -68,4 +72,4 @@ gulp.task("revRewrite", ["minify"], function() {
 });
 
 gulp.task("build", ["revRewrite"]);
-gulp.task("dev", ["sass", "serve"]);
+gulp.task("dev", ["sass", "copy-index-dev", "copy-images", "serve"]);
